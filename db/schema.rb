@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_29_185900) do
+ActiveRecord::Schema.define(version: 2020_07_02_180316) do
+
+  create_table "days", force: :cascade do |t|
+    t.string "day"
+    t.integer "checked"
+    t.integer "habit_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["habit_id"], name: "index_days_on_habit_id"
+  end
 
   create_table "habits", force: :cascade do |t|
     t.string "title"
@@ -29,5 +38,6 @@ ActiveRecord::Schema.define(version: 2020_06_29_185900) do
     t.string "email"
   end
 
+  add_foreign_key "days", "habits"
   add_foreign_key "habits", "users"
 end

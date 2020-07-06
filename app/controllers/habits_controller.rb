@@ -4,7 +4,7 @@ class HabitsController < ApplicationController
 
     def index
         @habits = Habit.all
-        render json: @todos
+        render json: @habits
     end
 
     def show
@@ -15,9 +15,18 @@ class HabitsController < ApplicationController
         @habit = Habit.new(habit_params)
 
         if @habit.save
-        render json: @habit, status: :created, location: @habit
+            i = 1
+            while i <= @habit.day_count
+                Day.create(                   
+                    day:  "Day #{i}", 
+                    checked: 0, 
+                    habit_id: @habit.id                    
+                )
+                i=i+1
+            end
+            render json: @habit, status: :created, location: @habit
         else
-        render json: @habit.errors, status: :unprocessable_entity
+            render json: @habit.errors, status: :unprocessable_entity
         end
     end
 
@@ -38,7 +47,7 @@ class HabitsController < ApplicationController
         @habit = Habit.find(params[:id])
         end
 
-        def todo_params
-        params.require(:habit).permit(:title, :day_count, :user_id)
+        def habit_params
+        params.require(:habit).permit(:title, :day_count, :user_id, :day)
         end
 end
